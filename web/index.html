@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>venom-notify</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/7806f5acd8.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  </head>
+  <body>
+    <div id="notify-container"></div>
+    <audio id="notify-sound" src="./sound.mp3" preload></audio>
+
+    <script>
+      window.onload = function (e) {
+        window.addEventListener("message", function (event) {
+          switch (event.data.action) {
+            case "notify":
+              createNotify(event.data.msg, event.data.bgColor, event.data.iconColor, event.data.icon);
+              break;
+            default:
+              break;
+          }
+        });
+      };
+
+      function createNotify(message, bgColor, iconColor, iconType) {
+        const notifyContainer = $("#notify-container");
+
+        const notify = $('<div class="notify"></div>');
+        notify.css("background-color", bgColor);
+
+        const icon = $(
+          `<i style="color: ${iconColor};" id="icon" class="${iconType}"></i>`
+        );
+        const text = $("<p></p>").text(message);
+        const notifysound = document.getElementById("notify-sound");
+        notifysound.volume = 0.08;
+        notifysound.play();
+        notify.append(icon, text);
+        notifyContainer.append(notify);
+
+        notify.queue("fx", function (next) {
+          setTimeout(() => {
+            notify.fadeOut(500, function () {
+              $(this).remove();
+              next();
+            });
+          }, 4000);
+        });
+
+        notify.dequeue("fx");
+      }
+    </script>
+  </body>
+</html>
