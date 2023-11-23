@@ -8,7 +8,7 @@ exports["venom-notify"]:Notify("Example Msg", "#116B25", "#008A16", "fa-solid fa
 ```
 
 ## Preview
-
+https://imgur.com/ly49YSK
 
 
 
